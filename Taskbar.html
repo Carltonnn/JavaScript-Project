@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 02</title>
+  <!-- React -->
+  <!-- React Template from: https://raw.githubusercontent.com/reactjs/reactjs.org/main/static/html/single-file-example.html -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Don't use this in production: -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+  
+    function MyApp() {
+      return (
+        <React.Fragment>
+          <NavBar />
+          
+          <Main name='Carlton'/>
+          
+          <TodoApp />
+
+          <Footer />
+      </React.Fragment>);
+    }
+
+    function NavBar() {
+      return (
+        <nav className="container-fluid m-2 nav">
+            <a className="nav-link" href="/index.html">Introduction</a>
+            <a className="nav-link" href="/lesson-01/lesson-01.html">Lesson 01</a>
+            <a className="nav-link" href="/lesson-02/lesson-02.html">Lesson 02</a>
+        </nav>
+      );
+    }
+
+    function Main(props) {
+      return (
+        <main className="container-fluid m-3">
+            <h1>Whats good, {props.name}!</h1>
+        </main>
+      );
+    }
+     
+    class TodoApp extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = { items:[], text: '' };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+      }
+      handleChange(e) {
+        console.log('handleChange', 'state.text:', this.state.text);
+        this.setState({ text: e.target.value });
+      }
+      
+      handleSubmit(e) {
+        e.preventDefault();
+        
+        if (this.state.text.length === 0) { return; }
+        
+        const newItem = {
+          text: this.state.text,
+          id: Date.now()
+        };
+        
+        this.setState(state => ({
+          items: state.items.concat(newItem),
+          text: ''
+        }));
+
+        console.log('handleSubmit', 'state.items:', this.state.items);
+      }
+      
+      render() {
+        return (
+          <div className="container-fluid m-3">
+            <h2>To do list</h2>
+
+            <form onSubmit={this.handleSubmit}>
+              <div className="mb-3">
+                <label className="form-label">Insert the next task</label>
+                <input
+                  type="text"
+                  className="form-control w-25"
+                  id="newTask"
+                  onChange={this.handleChange}
+                  value={this.state.text}
+                />
+              </div>
+
+              <button type="submit" className="btn btn-primary">Add Task #{this.state.items.length + 1}</button>
+            </form>
+
+            <br />
+            <TodoList items={this.state.items}/>
+          </div>
+        );
+      }
+    }
+
+        
+    class TodoList extends React.Component {
+      render() {
+        return (
+          <ul>
+            {this.props.items.map(item => (
+              <li key={item.id}>{item.text}</li>
+            ))}
+          </ul>
+        );
+      }
+    }
+
+    function Footer() {
+      const currentYear = new Date().getFullYear();
+
+      return (
+        <footer className="fixed-bottom" >
+          <p className="text-center m-3">Copyright: {currentYear} &copy; All rights reserved.</p>
+        </footer>
+      );
+    }
+
+    const container = document.getElementById('root');
+    const root = ReactDOM.createRoot(container);
+    root.render(<MyApp />);
+
+  </script>
+  <!--
+    Note: this page is a great way to try React but it's not suitable for production.
+    It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+    Read this section for a production-ready setup with JSX:
+    https://reactjs.org/docs/add-react-to-a-website.html#add-jsx-to-a-project
+
+    In a larger project, you can use an integrated toolchain that includes JSX instead:
+    https://reactjs.org/docs/create-a-new-react-app.html
+
+    You can also use React without JSX, in which case you can remove Babel:
+    https://reactjs.org/docs/react-without-jsx.html
+  -->
+
+  <!-- Bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+  integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+  crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+  integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+  crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+  integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+  crossorigin="anonymous"></script>
+</body>
+</html>
